@@ -4,6 +4,7 @@
 import {ImageSlide} from './image-slide.js';
 import {TitleSlide} from './title.js';
 import {Rule30Slide} from './rule30.js';
+import {GolRuleSlide} from './golrule.js';
 
 export const slides = [
     new TitleSlide(),
@@ -29,6 +30,7 @@ export const slides = [
         {src: 'Conway_1k.jpg', caption: 'John Horton Conway (1937–2020)'},
         {src: 'conway_tongue.png'},
     ]),
+    new GolRuleSlide(),
     new ImageSlide('glider', [
         {src: 'tshirt.png'},
         {src: 'engraved_glider.jpg'},

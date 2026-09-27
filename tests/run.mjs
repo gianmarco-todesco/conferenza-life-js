@@ -69,6 +69,17 @@ function liveCells(life) {
 }
 
 {
+    // The counts of the rules slide: a blinker, horizontal.
+    const life = new SimpleLife();
+    life.place(parseRLE('3o!'), 0, 0);
+    const c = {};
+    life.forEachCount((x, y, n, alive) => { c[x + ',' + y] = n + (alive ? 'a' : ''); });
+    check('counts: the center of a blinker has 2 neighbours', c['1,0'] === '2a');
+    check('counts: an end of a blinker has 1', c['0,0'] === '1a');
+    check('counts: the cells above and below the center have 3', c['1,-1'] === '3' && c['1,1'] === '3');
+}
+
+{
     const rows = [Uint8Array.of(1)];
     for (let i = 0; i < 3; i++) rows.push(evolve(rows[rows.length - 1]));
     const txt = rows.map(r => r.join('')).join(' ');

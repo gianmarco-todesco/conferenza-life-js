@@ -42,7 +42,7 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 | 6 | | [regel30](#6-regel30) | immagini | implementata |
 | 7 | Life nell'arte | [life-arte](#7-life-arte) | immagini | implementata |
 | 8 | Conway | [conway](#8-conway) | immagini | implementata |
-| 9 | Le regole | [golrule](#9-golrule) | simulazione | definita |
+| 9 | Le regole | [golrule](#9-golrule) | simulazione | implementata |
 | 10 | | [glider](#10-glider) | immagini | implementata |
 | 11 | Life come computer | [porta-and](#11-porta-and) | simulazione | definita |
 | 12 | Potenza di calcolo | [macchine](#12-macchine) | immagini | implementata |
@@ -263,6 +263,21 @@ svuota, G nasconde la griglia.
 
 In tutti i passi si disegna col mouse, e restano i tasti dell'originale: R riempie a
 caso, Canc svuota, G mostra e nasconde la griglia.
+
+**Note sull'implementazione** (`js/slides/golrule.js`):
+- Passo 1: in alto compare la regola in due righe ("Una cella viva con 2 o 3 vicini
+  sopravvive, altrimenti muore. Una cella vuota con esattamente 3 vicini nasce.").
+  Se nel passo 0 non si è disegnato niente, compare un glider da contare. I numeri
+  aspettano la fine della sfumatura.
+- Passo 2: ogni → aggiunge un pattern (blocco, blinker, glider, R-pentomino) con il
+  nome sotto. Il glider va in alto a sinistra, lontano dai detriti dell'R-pentomino. I
+  nomi svaniscono dopo 20 generazioni, prima che i detriti li coprano.
+- Passo 3: riempimento casuale se ci si arriva da un ricaricamento, altrimenti restano
+  le celle del passo 2.
+- Andando avanti le celle restano; andando indietro, o ricaricando, il passo riparte
+  dal suo stato iniziale.
+- `e` scambia disegno e trascinamento sul tasto sinistro, per chi non ha il tasto
+  destro (trackpad). Velocità: 0,5 – 60 generazioni al secondo.
 
 ## 10. glider
 

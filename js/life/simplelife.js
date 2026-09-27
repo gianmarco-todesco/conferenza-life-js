@@ -53,7 +53,8 @@ export class SimpleLife {
             this.set(x0 + (flipX ? w - 1 - x : x), y0 + (flipY ? h - 1 - y : y), 1);
     }
 
-    step() {
+    // Live neighbours of every cell that has at least one.
+    counts() {
         const counts = new Map();
         for (const k of this.cells) {
             const x = keyX(k), y = keyY(k);
@@ -64,6 +65,19 @@ export class SimpleLife {
                     counts.set(n, (counts.get(n) || 0) + 1);
                 }
         }
+        return counts;
+    }
+
+    // cb(x, y, neighbours, alive) for every live cell and every dead cell with
+    // live neighbours: what the rule looks at to make the next generation.
+    forEachCount(cb) {
+        const counts = this.counts();
+        for (const [k, n] of counts) cb(keyX(k), keyY(k), n, this.cells.has(k));
+        for (const k of this.cells) if (!counts.has(k)) cb(keyX(k), keyY(k), 0, true);
+    }
+
+    step() {
+        const counts = this.counts();
         const next = new Set();
         for (const [k, c] of counts)
             if (c === 3 || (c === 2 && this.cells.has(k))) next.add(k);
