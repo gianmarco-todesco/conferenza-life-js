@@ -36,16 +36,16 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 |---|---|---|---|---|
 | 1 | Apertura | [title](#1-title) | animazione | definita |
 | 2 | Automi cellulari in natura | [bz-sim](#2-bz-sim) | simulazione | definita |
-| 3 | | [bz-foto](#3-bz-foto) | immagine | definita |
+| 3 | | [bz-foto](#3-bz-foto) | immagine | implementata |
 | 4 | | [rule30](#4-rule30) | animazione | definita |
-| 5 | | [conchiglie](#5-conchiglie) | immagini | definita |
-| 6 | | [regel30](#6-regel30) | immagini | definita |
-| 7 | Life nell'arte | [life-arte](#7-life-arte) | immagini | definita |
-| 8 | Conway | [conway](#8-conway) | immagini | definita |
+| 5 | | [conchiglie](#5-conchiglie) | immagini | implementata |
+| 6 | | [regel30](#6-regel30) | immagini | implementata |
+| 7 | Life nell'arte | [life-arte](#7-life-arte) | immagini | implementata |
+| 8 | Conway | [conway](#8-conway) | immagini | implementata |
 | 9 | Le regole | [golrule](#9-golrule) | simulazione | definita |
-| 10 | | [glider](#10-glider) | immagini | definita |
+| 10 | | [glider](#10-glider) | immagini | implementata |
 | 11 | Life come computer | [porta-and](#11-porta-and) | simulazione | definita |
-| 12 | Potenza di calcolo | [macchine](#12-macchine) | immagini | definita |
+| 12 | Potenza di calcolo | [macchine](#12-macchine) | immagini | implementata |
 | 13 | Hashlife | [cannone-p416](#13-cannone-p416) | hashlife | definita |
 | 14 | | [life-in-life](#14-life-in-life) | hashlife | definita |
 | 15 | | [ticker](#15-ticker) | hashlife | definita |
