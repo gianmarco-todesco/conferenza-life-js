@@ -68,3 +68,17 @@ html, body {
     color: var(--text);
     font-size: 44px;
 }
+
+/* Title slide */
+.title-text {
+    position: absolute;
+    inset: 0;
+    color: var(--text);
+    pointer-events: none;
+}
+.title-text div { position: absolute; white-space: nowrap; }
+.t-life   { left: 110px; top: 40px;  font-size: 210px; font-weight: bold; }
+.t-sub    { left: 780px; top: 80px;  font-size: 84px;  font-weight: bold; }
+.t-conway { left: 780px; top: 200px; font-size: 52px;  font-style: italic; }
+.t-name   { left: 118px; top: 290px; font-size: 50px; }
+.t-mail   { left: 118px; top: 355px; font-size: 44px; }

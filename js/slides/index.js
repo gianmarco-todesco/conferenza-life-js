@@ -2,8 +2,10 @@
 // Slides not implemented yet are missing from the list, not stubbed.
 
 import {ImageSlide} from './image-slide.js';
+import {TitleSlide} from './title.js';
 
 export const slides = [
+    new TitleSlide(),
     new ImageSlide('bz-foto', [
         {src: 'bz.png', caption: 'Reazione di Belousov-Zhabotinsky'},
     ]),

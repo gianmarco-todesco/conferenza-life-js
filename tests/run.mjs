@@ -1,0 +1,71 @@
+// Tests of the engines, runnable without a browser:  node tests/run.mjs
+// Each check pins a behaviour the slides rely on.
+
+import {SimpleLife, parseRLE, BORN, DYING, ALIVE} from '../js/life/simplelife.js';
+
+let failures = 0;
+function check(name, ok, detail = '') {
+    console.log((ok ? 'ok   ' : 'FAIL ') + name + (ok || !detail ? '' : ': ' + detail));
+    if (!ok) failures++;
+}
+
+function liveCells(life) {
+    const out = [];
+    life.forEachCell((x, y, s) => { if (s !== DYING) out.push(x + ',' + y); });
+    return out.sort().join(' ');
+}
+
+{
+    const life = new SimpleLife();
+    life.place(parseRLE('bo$2bo$3o!'), 0, 0);
+    const start = liveCells(life);
+    for (let i = 0; i < 4; i++) life.step();
+    const moved = start.split(' ').map(c => c.split(',').map(Number))
+        .map(([x, y]) => (x + 1) + ',' + (y + 1)).sort().join(' ');
+    check('a glider moves by (1,1) every 4 generations', liveCells(life) === moved, liveCells(life));
+}
+
+{
+    // The title slide shows Kok's galaxy in its 8 phases.
+    const galaxy = parseRLE('x = 9, y = 9\n6ob2o$6ob2o$7b2o$2o5b2o$2o5b2o$2o5b2o$2o$2ob6o$2ob6o!');
+    check('RLE header gives the size', galaxy.w === 9 && galaxy.h === 9);
+    const life = new SimpleLife();
+    life.place(galaxy, 0, 0);
+    const s0 = liveCells(life);
+    let period = 0;
+    for (let i = 1; i <= 16 && !period; i++) { life.step(); if (liveCells(life) === s0) period = i; }
+    check("Kok's galaxy has period 8", period === 8, 'period ' + period);
+}
+
+{
+    // Views fade cells in and out: they need to know which cells changed.
+    const life = new SimpleLife();
+    life.place(parseRLE('3o!'), 0, 0);        // a blinker
+    life.settle();
+    life.step();
+    const states = {};
+    life.forEachCell((x, y, s) => { states[x + ',' + y] = s; });
+    check('blinker: the center survives', states['1,0'] === ALIVE);
+    check('blinker: the ends are dying', states['0,0'] === DYING && states['2,0'] === DYING);
+    check('blinker: the new cells are born', states['1,-1'] === BORN && states['1,1'] === BORN);
+}
+
+{
+    // Edits are shown at once, not faded in.
+    const life = new SimpleLife();
+    life.set(5, 5, 1);
+    let s = 0;
+    life.forEachCell((x, y, st) => { s = st; });
+    check('an edited cell is ALIVE, not BORN', s === ALIVE);
+}
+
+{
+    // place() overwrites the whole bounding box, as the Qt version did.
+    const life = new SimpleLife();
+    life.set(1, 1, 1);
+    life.place(parseRLE('x = 3, y = 3\no!'), 0, 0);
+    check('place() clears the dead cells of the pattern box', life.get(1, 1) === 0 && life.get(0, 0) === 1);
+}
+
+console.log(failures ? `\n${failures} FAILED` : '\nall ok');
+process.exitCode = failures ? 1 : 0;

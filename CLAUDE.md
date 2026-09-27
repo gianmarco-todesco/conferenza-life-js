@@ -31,6 +31,10 @@ accorgersene.
 
 L'URL porta slide e passo: `#rule30/3`. Ricaricando si torna lì.
 
+I motori si provano senza browser: `node tests/run.mjs` (per questo c'è `package.json`
+con `"type": "module"`, e nient'altro). Ogni comportamento non ovvio su cui una slide
+conta ha un test lì.
+
 ## Struttura
 
 ```

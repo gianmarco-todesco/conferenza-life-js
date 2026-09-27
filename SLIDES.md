@@ -34,7 +34,7 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 
 | # | Capitolo | Slide | Tipo | Stato |
 |---|---|---|---|---|
-| 1 | Apertura | [title](#1-title) | animazione | definita |
+| 1 | Apertura | [title](#1-title) | animazione | implementata |
 | 2 | Automi cellulari in natura | [bz-sim](#2-bz-sim) | simulazione | definita |
 | 3 | | [bz-foto](#3-bz-foto) | immagine | implementata |
 | 4 | | [rule30](#4-rule30) | animazione | definita |
