@@ -45,7 +45,8 @@ js/slides/index.js          l'ORDINE delle slide: una slide non ancora fatta non
 js/slides/*.js              una slide (o una famiglia di slide) per file
 js/life/                    motori: Life semplice, hashlife
 assets/images, assets/patterns
-tools/                      strumenti fuori dalla presentazione (generatore del ticker)
+tools/                      strumenti fuori dalla presentazione: ricerca e verifica della
+                            porta AND (node tools/and-verify.mjs), generatore del ticker
 ```
 
 ## Il contratto di una slide (`Slide` in `js/core/stage.js`)

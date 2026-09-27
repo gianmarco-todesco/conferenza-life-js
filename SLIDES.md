@@ -44,7 +44,7 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 | 8 | Conway | [conway](#8-conway) | immagini | implementata |
 | 9 | Le regole | [golrule](#9-golrule) | simulazione | implementata |
 | 10 | | [glider](#10-glider) | immagini | implementata |
-| 11 | Life come computer | [porta-and](#11-porta-and) | simulazione | definita |
+| 11 | Life come computer | [porta-and](#11-porta-and) | simulazione | implementata |
 | 12 | Potenza di calcolo | [macchine](#12-macchine) | immagini | implementata |
 | 13 | Hashlife | [cannone-p416](#13-cannone-p416) | hashlife | implementata |
 | 14 | | [life-in-life](#14-life-in-life) | hashlife | implementata |
@@ -392,6 +392,36 @@ slide):
   sovrappone, altrimenti restano detriti.
 - La tavola di verità deve seguire i sensori, non i tasti: la riga evidenziata è quella
   dello stato che i glider hanno raggiunto davvero.
+
+**Implementazione** (`js/slides/porta-and.js`; la geometria sta in `js/life/and-gate.js`).
+
+La geometria è stata trovata e verificata con gli strumenti in `tools/`:
+- `and-search.mjs` cerca le posizioni dei cannoni e degli eater;
+- `and-phases.mjs` trova le fasi in cui un interruttore può scattare;
+- `and-verify.mjs` verifica la tavola di verità, i sensori e 16 commutazioni casuali:
+  alla fine la porta è identica, cella per cella, a una costruita in quello stato.
+
+Chi cambia un numero in `and-gate.js` rilancia `node tools/and-verify.mjs`.
+
+Come funziona:
+- **Cannoni**: A e B sono in alto a sinistra, T in alto a destra, tutti fuori
+  dall'inquadratura del passo 2. T incontra B verso (19, −8) e A verso (−21, 31).
+- **Ricevitore**: un eater in (−9, 43), con la lampadina accanto. T finisce in un
+  eater fuori campo, in basso a sinistra.
+- **Interruttori**: eater appena sotto i cannoni A e B. Il flusso è così fitto che
+  vicino all'eater c'è sempre un glider. Togliere l'eater è pulito in qualunque fase;
+  metterlo solo nella fase 16 mod 30. Quindi `a` e `b` a volte aspettano fino a 29
+  generazioni, e un secondo tasto prima dello scatto lo annulla.
+- **Canali**: striscia verde o rossa secondo il sensore del tratto. Un tratto è attivo
+  se il suo sensore ha visto un glider nelle ultime 45 generazioni. I tratti sono:
+  A prima dell'incrocio con T; A dopo, fino al ricevitore; B; T prima di B; T fra B e
+  A.
+- **Tavola di verità**: in basso a destra, con la riga dei sensori di A e B
+  evidenziata.
+- **Passo 2**: la porta compare già a regime, dopo 720 generazioni calcolate in
+  anticipo. Senza, il primo glider arriverebbe al ricevitore solo dopo 8 secondi.
+- **Passo 1**: sono i cannoni B e T della porta, visti per intero: le loro
+  annichilazioni sono pulite per costruzione.
 
 ## 12. macchine
 

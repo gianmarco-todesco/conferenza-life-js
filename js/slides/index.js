@@ -7,6 +7,7 @@ import {Rule30Slide} from './rule30.js';
 import {GolRuleSlide} from './golrule.js';
 import {BZSlide, BZFusionSlide} from './bz.js';
 import {P416Slide, LifeInLifeSlide, TickerSlide} from './hashlife-slides.js';
+import {PortaAndSlide} from './porta-and.js';
 
 export const slides = [
     new TitleSlide(),
@@ -40,6 +41,7 @@ export const slides = [
         {src: 'tshirt.png'},
         {src: 'engraved_glider.jpg'},
     ]),
+    new PortaAndSlide(),
     new ImageSlide('macchine', [
         {src: 'rise_of_machines.png'},
         {src: 'rise_of_machines2.jpg'},

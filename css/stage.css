@@ -166,3 +166,23 @@ html, body {
     pointer-events: none;
     white-space: pre;
 }
+
+/* AND gate: the truth table, the row reached by the gliders highlighted */
+.and-table {
+    position: absolute;
+    right: 60px;
+    bottom: 60px;      /* the top right is where T comes in */
+    color: var(--text);
+    font-size: 40px;
+    background: var(--caption-band);
+    padding: 16px 24px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.and-table.visible { opacity: 1; }
+.and-table table { border-collapse: collapse; }
+.and-table th, .and-table td { padding: 4px 22px; text-align: center; }
+.and-table th { border-bottom: 2px solid rgba(255, 255, 255, 0.6); }
+.and-table tr.current td { background: rgba(255, 225, 80, 0.85); color: #222; font-weight: bold; }
