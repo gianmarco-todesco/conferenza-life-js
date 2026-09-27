@@ -6,6 +6,7 @@ import {TitleSlide} from './title.js';
 import {Rule30Slide} from './rule30.js';
 import {GolRuleSlide} from './golrule.js';
 import {BZSlide, BZFusionSlide} from './bz.js';
+import {P416Slide, LifeInLifeSlide, TickerSlide} from './hashlife-slides.js';
 
 export const slides = [
     new TitleSlide(),
@@ -44,4 +45,7 @@ export const slides = [
         {src: 'rise_of_machines2.jpg'},
         {src: 'gollys.png', caption: 'Golly'},
     ]),
+    new P416Slide(),
+    new LifeInLifeSlide(),
+    new TickerSlide(),
 ];

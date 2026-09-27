@@ -46,9 +46,9 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 | 10 | | [glider](#10-glider) | immagini | implementata |
 | 11 | Life come computer | [porta-and](#11-porta-and) | simulazione | definita |
 | 12 | Potenza di calcolo | [macchine](#12-macchine) | immagini | implementata |
-| 13 | Hashlife | [cannone-p416](#13-cannone-p416) | hashlife | definita |
-| 14 | | [life-in-life](#14-life-in-life) | hashlife | definita |
-| 15 | | [ticker](#15-ticker) | hashlife | definita |
+| 13 | Hashlife | [cannone-p416](#13-cannone-p416) | hashlife | implementata |
+| 14 | | [life-in-life](#14-life-in-life) | hashlife | implementata |
+| 15 | | [ticker](#15-ticker) | hashlife | implementata, senza generatore |
 
 Restano fuori, per ora: la slide 0 dell'originale (il `GlLifeViewer` vuoto),
 `DrostePage`, `Viewer3/4`. Tolta: la slide dei credits. Il generatore del ticker non è
@@ -415,6 +415,27 @@ che seguono.
 - contatore delle generazioni;
 - velocità a passi con + / −: 1, 10, 100, 4000… generazioni per fotogramma.
 
+**Note sull'implementazione** del visualizzatore:
+- Il motore è `js/life/hashlife.js`, riscritto a partire dall'esperimento
+  `claude-experiments/hashlife-viewer`:
+  - i nodi stanno in array tipizzati;
+  - ogni nodo ha due memo: a velocità piena, che non si butta mai, e al passo corrente;
+  - la garbage collection compatta gli array e tiene i memo.
+- È provato contro il motore semplice in `tests/run.mjs`.
+- Legge RLE e macrocell (`js/life/patterns.js`).
+- Resa (`js/life/hashview.js`): da lontano ogni pixel ha il grigio della frazione di
+  celle vive che copre; da vicino le celle sono quadrati, con il bordo da 6 px in su.
+- Le velocità sono potenze di 2 e non 1/10/100/4000: HashLife salta di 2^k
+  generazioni. Si va da una generazione ogni 8 fotogrammi fino a 65536 per fotogramma.
+  L'indicazione in alto a sinistra dice generazione e velocità.
+- Tasti: Invio avvia e ferma, Spazio fa un passo, +/− la velocità, `t` mostra tutto,
+  `0` ricomincia dalla generazione 0 (da un passo successivo, il primo `0` torna al
+  passo 0 e il secondo ricomincia). → vola alla prossima inquadratura del passo
+  successivo.
+- Il visualizzatore Qt disegnava con la y verso l'alto, quindi mostrava tutto
+  capovolto. Qui il cannone e la galassia si vedono specchiati rispetto ad allora, e
+  il ticker si carica ribaltato, così la scritta si legge.
+
 ## 14. life-in-life
 
 **Originale** (`GlLifeViewer`, tasto 2). `metapixel-galaxy.mc`: una galassia di Kok
@@ -432,7 +453,19 @@ vuole andare oltre.
   metacella. Il valore 39000 va ricontrollato sul pattern.
 - Invio riparte da dove ci si è fermati.
 
-**Proposta** (da provare):
+**Implementato** (da provare):
+- Tre passi, ciascuno con la sua inquadratura e la sua velocità:
+  1. il primo piano dell'originale, a `(2214, -1928)`, 12 px per cella, una generazione
+     per fotogramma;
+  2. la metacella intera (colonna 9, riga 7 della tassellazione 15×15), 64 generazioni
+     per fotogramma;
+  3. la galassia intera, 1024 per fotogramma.
+- `s` corre fino al prossimo punto di sincronia (verificato: si ferma esattamente a
+  39000).
+- Da verificare a schermo: se la metacella scelta è quella che cambia colore a 39000.
+  Nel primo fotogramma è spenta, e la sua vicina di destra è accesa.
+
+**Proposta originale:**
 - Lo zoom è il racconto. I passi → portano la vista dalle celle a una metacella intera e
   poi a tutta la galassia, con transizioni animate.
 - Da lontano, livelli di grigio proporzionali alla popolazione invece del pixel pieno.
@@ -454,4 +487,8 @@ rigenerare il ticker con un'immagine o una scritta adatta a chi lo ha invitato.
 - Produce un `.rle` (o `.mc`) che la slide carica.
 - Prima di riscriverlo va capito bene `loadTicker_old`, compreso il codice commentato
   che sembra una seconda versione.
+
+**Implementato: la slide**, con il `ticker.rle` di allora ("Giornate dello Studente").
+Ha due passi: il primo piano dell'originale e la vista d'insieme. Il generatore è
+ancora da fare.
 

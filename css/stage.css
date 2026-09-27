@@ -154,3 +154,15 @@ html, body {
 .bzf.act2 .bzf-photo { left: -960px; width: 960px; opacity: 0; }
 .bzf.act2 .bzf-sim   { left: 0;     width: 1920px; opacity: 1; }
 .bzf.act2 .caption   { opacity: 0; }
+
+/* HashLife slides: generation counter and speed */
+.hash-hud {
+    position: absolute;
+    left: 40px;
+    top: 28px;
+    color: var(--text);
+    font-size: 32px;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    white-space: pre;
+}

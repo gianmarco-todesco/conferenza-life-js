@@ -4,6 +4,8 @@
 import {SimpleLife, parseRLE, BORN, DYING, ALIVE} from '../js/life/simplelife.js';
 import {evolve, Rule30Model, MANUAL_ROWS} from '../js/life/rule30.js';
 import {BZModel, MsvcRand, PARAMS} from '../js/life/bz.js';
+import {HashLife} from '../js/life/hashlife.js';
+import {loadMacrocell} from '../js/life/patterns.js';
 
 let failures = 0;
 function check(name, ok, detail = '') {
@@ -130,6 +132,62 @@ function liveCells(life) {
     bz.step();
     for (let i = 0; i < before.length; i++) if (before[i] !== bz.cells[i]) moving = true;
     check('BZ: the reaction is still going after 50 steps', moving);
+}
+
+{
+    // HashLife must agree with the plain engine, whatever the step.
+    const soup = [];
+    let seed = 12345;
+    const rnd = () => ((seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 2 ** 32);
+    for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) if (rnd() < 0.4) soup.push([x - 7, y - 5]);
+    const plain = new SimpleLife();
+    for (const [x, y] of soup) plain.set(x, y, 1);
+    const cellsOf = life => {
+        const out = [];
+        life.forEachCell((x, y, st) => { if (st !== DYING) out.push(x + ',' + y); });
+        return out.sort().join(' ');
+    };
+    const hashCells = (hl, box) => {
+        const out = [];
+        for (let y = box[1]; y <= box[3]; y++)
+            for (let x = box[0]; x <= box[2]; x++) if (hl.get(x, y)) out.push(x + ',' + y);
+        return out.sort().join(' ');
+    };
+    for (let i = 0; i < 100; i++) plain.step();
+    for (const steps of [[0], [2], [5], [3, 1]]) {
+        const hl = new HashLife({capacity: 1 << 12});
+        hl.setCells(soup);
+        // 100 generations in steps of 2^k when 2^k divides 100; otherwise
+        // advanceBy, which mixes step sizes (with 2^5: 32 + 32 + 32 + 4).
+        if (steps.length === 1 && 100 % 2 ** steps[0] === 0) { const k = steps[0]; for (let g = 0; g < 100; g += 2 ** k) hl.advance(k); }
+        else hl.advanceBy(100, steps[0]);
+        const box = hl.boundingBox();
+        check('hashlife = plain Life after 100 generations, steps ' + steps.join('/'),
+            hl.generation === 100 && hashCells(hl, box) === cellsOf(plain), 'gen ' + hl.generation);
+    }
+    // The bounding box on the same soup.
+    const hl = new HashLife();
+    hl.setCells(soup);
+    const xs = soup.map(c => c[0]), ys = soup.map(c => c[1]);
+    const box = hl.boundingBox();
+    check('hashlife bounding box', box.join() === [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].join(), box.join());
+    // Collecting garbage changes nothing but the node count.
+    const a = new HashLife(); a.setCells(soup); a.advanceBy(64, 3);
+    const before = hashCells(a, a.boundingBox()), nodes = a.count;
+    a.collect(); a.collect(false);
+    check('garbage collection keeps the pattern', hashCells(a, a.boundingBox()) === before && a.count < nodes);
+    a.advanceBy(36, 2);
+    check('and the pattern goes on correctly after it', hashCells(a, a.boundingBox()) === cellsOf(plain));
+}
+
+{
+    // Macrocell: a glider in an 8x8 leaf under a level-4 root.
+    const hl = new HashLife();
+    loadMacrocell(hl, ['[M2] (test)', '#R B3/S23', '.*$..*$***$', '4 1 0 0 0'].join(String.fromCharCode(10)));
+    const cells = [];
+    for (let y = -8; y < 8; y++) for (let x = -8; x < 8; x++) if (hl.get(x, y)) cells.push(x + ',' + y);
+    check('macrocell: the leaf is the top-left 8x8 of a root centered on the origin',
+        cells.join(' ') === '-7,-8 -6,-7 -8,-6 -7,-6 -6,-6', cells.join(' '));
 }
 
 console.log(failures ? `\n${failures} FAILED` : '\nall ok');
