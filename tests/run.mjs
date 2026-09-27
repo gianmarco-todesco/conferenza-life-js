@@ -2,6 +2,7 @@
 // Each check pins a behaviour the slides rely on.
 
 import {SimpleLife, parseRLE, BORN, DYING, ALIVE} from '../js/life/simplelife.js';
+import {evolve, Rule30Model, MANUAL_ROWS} from '../js/life/rule30.js';
 
 let failures = 0;
 function check(name, ok, detail = '') {
@@ -65,6 +66,40 @@ function liveCells(life) {
     life.set(1, 1, 1);
     life.place(parseRLE('x = 3, y = 3\no!'), 0, 0);
     check('place() clears the dead cells of the pattern box', life.get(1, 1) === 0 && life.get(0, 0) === 1);
+}
+
+{
+    const rows = [Uint8Array.of(1)];
+    for (let i = 0; i < 3; i++) rows.push(evolve(rows[rows.length - 1]));
+    const txt = rows.map(r => r.join('')).join(' ');
+    check('rule 30: the first rows', txt === '1 111 11001 1101111', txt);
+}
+
+{
+    // The Rule 30 slide, driven as in the talk.
+    const md = new Rule30Model();
+    const run = s => { for (let t = 0; t < s; t += 0.02) md.update(0.02); };
+    check('rule30: starts ready, no window', md.mode === 'ready' && !md.windowVisible);
+    md.space();
+    run(5);
+    check('rule30: the scan stops on the first triple other than 000',
+        md.mode === 'manual' && md.c === -1 && md.triple(md.c) === 1, md.mode + ' ' + md.c);
+    md.space();
+    check('rule30: Space moves one cell', md.c === 0 && md.triple(0) === 2);
+    md.forward();
+    run(5);
+    check('rule30: → finishes and welds row 1, the scan restarts on row 2',
+        md.m === 1 && md.mode === 'manual' && md.c === md.firstInteresting(1), md.m + ' ' + md.mode);
+    md.back();
+    check('rule30: ← at the start of row 2 goes back to the start of row 1',
+        md.m === 0 && md.mode === 'ready');
+    md.forward(); run(5); md.forward(); run(5);
+    check('rule30: after row 2 the slide is in fast mode', md.m === MANUAL_ROWS && md.mode === 'fast');
+    md.space(); md.forward();
+    check('rule30: in fast mode Space and → add a row each', md.m === MANUAL_ROWS + 2);
+    md.back(); md.back(); md.back();
+    check('rule30: ← out of fast mode lands at the start of the last manual row',
+        md.m === MANUAL_ROWS - 1 && md.mode === 'manual' && md.atRowStart());
 }
 
 console.log(failures ? `\n${failures} FAILED` : '\nall ok');

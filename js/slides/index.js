@@ -3,12 +3,14 @@
 
 import {ImageSlide} from './image-slide.js';
 import {TitleSlide} from './title.js';
+import {Rule30Slide} from './rule30.js';
 
 export const slides = [
     new TitleSlide(),
     new ImageSlide('bz-foto', [
         {src: 'bz.png', caption: 'Reazione di Belousov-Zhabotinsky'},
     ]),
+    new Rule30Slide(),
     new ImageSlide('conchiglie', [
         {src: 'shell.png', caption: 'Conus textile'},
         {src: 'shell2.png', caption: 'Marco Schutzmann'},

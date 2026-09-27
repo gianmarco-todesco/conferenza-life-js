@@ -37,7 +37,7 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 | 1 | Apertura | [title](#1-title) | animazione | implementata |
 | 2 | Automi cellulari in natura | [bz-sim](#2-bz-sim) | simulazione | definita |
 | 3 | | [bz-foto](#3-bz-foto) | immagine | implementata |
-| 4 | | [rule30](#4-rule30) | animazione | definita |
+| 4 | | [rule30](#4-rule30) | animazione | implementata |
 | 5 | | [conchiglie](#5-conchiglie) | immagini | implementata |
 | 6 | | [regel30](#6-regel30) | immagini | implementata |
 | 7 | Life nell'arte | [life-arte](#7-life-arte) | immagini | implementata |
@@ -197,6 +197,18 @@ Le animazioni andavano per fotogramma, non per tempo.
 
 `L` e `N` sono interruttori e non passi, così togliere l'uno o l'altro non sposta la
 sequenza. Le animazioni vanno a tempo, non a fotogrammi.
+
+**Note sull'implementazione** (`js/life/rule30.js` per la macchina a stati, testata in
+`tests/run.mjs`; `js/slides/rule30.js` per il disegno):
+- La finestrella è una cornice scura sulle tre celle, più il triangolo bianco che punta
+  alla cella nuova: la cornice non c'era nell'originale.
+- I posti ancora vuoti della riga nuova si vedono come contorni tenui.
+- La lettura come numero (`N`) sta **a destra** della regola, non sotto: sotto non c'è
+  spazio. Ogni cifra ha il colore della sua cella.
+- Dietro la regola c'è una fascia semitrasparente, così un triangolo ingrandito non ci si
+  sovrappone.
+- Il passo corrente dentro la slide (riga, cella) non finisce nell'URL: ricaricando si
+  riparte dall'inizio della slide.
 
 ## 5. conchiglie
 

@@ -37,6 +37,11 @@ export class Slide {
     // Must bring the slide to act n from any state, including a later act:
     // going back and reloading the page on '#name/n' both rely on it.
     enterAct(n, previous) {}
+    // ArrowRight/ArrowLeft are offered here first: a slide whose steps are not
+    // acts (a cell, a row) moves itself and returns true. Otherwise the stage
+    // moves to the next/previous act.
+    next() { return false; }
+    prev() { return false; }
     // Returns true if the key was used.
     onKey(e) { return false; }
     onPointerDown(p, e) {}
@@ -161,8 +166,8 @@ function onKeyDown(e) {
         case 'ArrowDown': showSlide(currentIndex + 1); break;
         case 'PageUp':
         case 'ArrowUp': showSlide(currentIndex - 1); break;
-        case 'ArrowRight': setAct(current.act + 1); break;
-        case 'ArrowLeft': setAct(current.act - 1); break;
+        case 'ArrowRight': if (!current.next()) setAct(current.act + 1); break;
+        case 'ArrowLeft': if (!current.prev()) setAct(current.act - 1); break;
         // Also when already on act 0: '0' is how a slide is restarted.
         case '0': if (current.act === 0) current.enterAct(0, 0); else setAct(0); break;
         case 'f':

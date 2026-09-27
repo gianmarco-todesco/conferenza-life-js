@@ -55,6 +55,8 @@ tools/                      strumenti fuori dalla presentazione (generatore del 
   Tutto quello che la slide crea va nel suo layer, mai in `body`.
 - `enterAct(n, previous)` deve portare la slide al passo `n` **da qualunque stato**,
   anche da un passo successivo: ci contano ← e il ricaricamento su `#nome/n`.
+- `next()` e `prev()` ricevono per primi → e ←: una slide che ha passi suoi (una cella,
+  una riga) li gestisce e restituisce `true`, altrimenti il palco cambia passo.
 - `update(dt, t)` a ogni fotogramma finché la slide è mostrata. Le animazioni vanno a
   tempo (`dt`), non a fotogrammi.
 - `onKey(e)` riceve i tasti che la navigazione non usa e restituisce `true` se li usa.
