@@ -9,6 +9,9 @@ faceva l'originale, le decisioni prese con GMT e lo stato
 (`definita` → `implementata` → `provata`). Si aggiorna quando si decide qualcosa o si
 completa una slide.
 
+**`STATO-PROGETTO.md` è il documento di ripresa**: a che punto siamo, il prossimo passo,
+cosa resta da guardare a schermo intero. Va aggiornato a fine sessione.
+
 ## Modo di lavorare
 
 - Una slide per volta. **Un commit per ogni slide completata, e push** su `origin main`.
