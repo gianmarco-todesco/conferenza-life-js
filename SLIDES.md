@@ -35,7 +35,7 @@ L'ordine è quello dell'originale, raggruppato per capitoli dedotti dalle slide:
 | # | Capitolo | Slide | Tipo | Stato |
 |---|---|---|---|---|
 | 1 | Apertura | [title](#1-title) | animazione | implementata |
-| 2 | Automi cellulari in natura | [bz-sim](#2-bz-sim) | simulazione | definita |
+| 2 | Automi cellulari in natura | [bz-sim](#2-bz-sim) | simulazione | implementata |
 | 3 | | [bz-foto](#3-bz-foto) | immagine | implementata |
 | 4 | | [rule30](#4-rule30) | animazione | implementata |
 | 5 | | [conchiglie](#5-conchiglie) | immagini | implementata |
@@ -87,6 +87,28 @@ sono commentati: servivano a cercare un buon seme casuale.
   Si implementano le due slide separate, e la fusione si prova come variante.
 - Niente interazione col mouse, per ora.
 - La risoluzione si può alzare, per esempio a 480×270 celle.
+
+**Note sull'implementazione** (`js/life/bz.js`, `js/slides/bz.js`):
+- Stessa regola e stessi parametri del Qt, divisioni intere comprese. Anche la
+  tavolozza è la stessa, con la sua stranezza: è calcolata con q=150 invece di 210, per
+  questo i colori tornano verso il chiaro.
+- 320×180 celle su un toro, 6 pixel del palco per cella. La canvas ha un pixel per
+  cella e il CSS la ingrandisce con lo smussamento: le onde sembrano liquide, non a
+  quadretti.
+- Il seme 17 passa per il `rand()` della libreria C di Microsoft, riprodotto esatto. Il
+  risultato però non è la configurazione del Qt, perché la griglia ha un'altra
+  dimensione.
+- La velocità di partenza è 25 passi al secondo, come il Qt (un passo per fotogramma).
+  Con +/− va da 5 a 50.
+- Tasti: Invio avvia e ferma, Spazio fa un passo, Canc ricomincia. In `bz-sim` la
+  rotella fa lo zoom e il trascinamento sposta la vista.
+- **La variante `bz-fusione`** sta nell'elenco subito dopo `bz-foto`, perché GMT la
+  valuti. Ha tre passi:
+  1. la foto;
+  2. la foto scivola a sinistra e a destra compare la simulazione, che parte da sola;
+  3. resta la simulazione a tutto schermo.
+
+  Dopo la prova se ne tiene una sola delle due soluzioni.
 
 ## 3. bz-foto
 

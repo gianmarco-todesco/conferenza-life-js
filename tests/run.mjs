@@ -3,6 +3,7 @@
 
 import {SimpleLife, parseRLE, BORN, DYING, ALIVE} from '../js/life/simplelife.js';
 import {evolve, Rule30Model, MANUAL_ROWS} from '../js/life/rule30.js';
+import {BZModel, MsvcRand, PARAMS} from '../js/life/bz.js';
 
 let failures = 0;
 function check(name, ok, detail = '') {
@@ -111,6 +112,24 @@ function liveCells(life) {
     md.back(); md.back(); md.back();
     check('rule30: ← out of fast mode lands at the start of the last manual row',
         md.m === MANUAL_ROWS - 1 && md.mode === 'manual' && md.atRowStart());
+}
+
+{
+    // The seed of the BZ slide goes through the rand() of the Microsoft C
+    // runtime, as in the Qt version: srand(1) gives 41, 18467, 6334.
+    const r = new MsvcRand(1);
+    const v = [r.next(), r.next(), r.next()];
+    check('MSVC rand() sequence', v.join() === '41,18467,6334', v.join());
+    const bz = new BZModel(40, 30);
+    for (let i = 0; i < 50; i++) bz.step();
+    let ok = true;
+    for (const c of bz.cells) if (c < 1 || c > PARAMS.q) ok = false;
+    check('BZ: every cell stays between healthy (1) and ill (q)', ok);
+    let moving = false;
+    const before = bz.cells.slice();
+    bz.step();
+    for (let i = 0; i < before.length; i++) if (before[i] !== bz.cells[i]) moving = true;
+    check('BZ: the reaction is still going after 50 steps', moving);
 }
 
 console.log(failures ? `\n${failures} FAILED` : '\nall ok');

@@ -5,12 +5,16 @@ import {ImageSlide} from './image-slide.js';
 import {TitleSlide} from './title.js';
 import {Rule30Slide} from './rule30.js';
 import {GolRuleSlide} from './golrule.js';
+import {BZSlide, BZFusionSlide} from './bz.js';
 
 export const slides = [
     new TitleSlide(),
+    new BZSlide(),
     new ImageSlide('bz-foto', [
         {src: 'bz.png', caption: 'Reazione di Belousov-Zhabotinsky'},
     ]),
+    // A variant of the two slides above, for GMT to judge (SLIDES.md, bz-sim).
+    new BZFusionSlide(),
     new Rule30Slide(),
     new ImageSlide('conchiglie', [
         {src: 'shell.png', caption: 'Conus textile'},
